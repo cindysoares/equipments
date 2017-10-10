@@ -14,19 +14,34 @@ public class TerminalController {
 	
 	@GetMapping("/{logic}")
 	public Terminal getTerminal(@PathVariable Integer logic) {
-		return new Terminal(logic);
+		return new Terminal(logic, null, null, null, null, null, null, null, null, null);
     }
 	
 	@PostMapping(value="", consumes=MediaType.TEXT_PLAIN_VALUE)
 	public Terminal insertTerminal(@RequestBody String terminalValues) {
 		String[] values = terminalValues.split(";");
-		return new Terminal(Integer.valueOf(values[0]));
+		return new Terminal(Integer.valueOf(values[0]), values[1], values[2],
+				Integer.valueOf(values[3]), values[4], Integer.valueOf(values[5]),
+				values[6], Integer.valueOf(values[7]), Integer.valueOf(values[8]), 
+				values[9]);
 	}
 	
 	@PostMapping(value="/{logic}", consumes=MediaType.TEXT_PLAIN_VALUE)
-	public Terminal insertTerminal(@PathVariable Integer logic, @RequestBody String terminalValues) {
+	public Terminal updateTerminal(@PathVariable Integer logic, @RequestBody String terminalValues) {
+		Terminal terminalToUpdate = new Terminal(logic, null, null, null, null, null, null, null, null, null);
+		
 		String[] values = terminalValues.split(";");
-		return new Terminal(Integer.valueOf(values[0]));
+		terminalToUpdate.setSerial(values[1]);
+		terminalToUpdate.setModel(values[2]);
+		terminalToUpdate.setSam(Integer.valueOf(values[3]));
+		terminalToUpdate.setPtid(values[4]);
+		terminalToUpdate.setPlat(Integer.valueOf(values[5]));
+		terminalToUpdate.setVersion(values[6]);
+		terminalToUpdate.setMxr(Integer.valueOf(values[7]));
+		terminalToUpdate.setMxf(Integer.valueOf(values[8]));
+		terminalToUpdate.setVerfm(values[9]);
+
+		return terminalToUpdate;
 	}
 
 }

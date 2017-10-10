@@ -57,7 +57,16 @@ public class TerminalControllerTest {
 			.contentType(MediaType.TEXT_PLAIN))
 		.andExpect(status().isOk())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("logic", is(44332211)));
+		.andExpect(jsonPath("logic", is(44332211)))
+		.andExpect(jsonPath("serial", is("123")))
+		.andExpect(jsonPath("model", is("PWWIN")))
+		.andExpect(jsonPath("sam", is(0)))
+		.andExpect(jsonPath("ptid", is("F04A2E4088B")))
+		.andExpect(jsonPath("plat", is(4)))
+		.andExpect(jsonPath("version", is("8.00b3")))
+		.andExpect(jsonPath("mxr", is(0)))
+		.andExpect(jsonPath("mxf", is(16777216)))
+		.andExpect(jsonPath("VERFM", is("PWWIN")));
 	}
 	
 	@Test
@@ -69,12 +78,21 @@ public class TerminalControllerTest {
 	
 	@Test
 	public void testUpdateTerminal() throws Exception {
-		mvc.perform(post("/v1.0/terminal/1234")
-				.content("44332211;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
+		mvc.perform(post("/v1.0/terminal/44332211")
+				.content("1234;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
 				.contentType(MediaType.TEXT_PLAIN))
 			.andExpect(status().isOk())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("logic", is(44332211)));
+			.andExpect(jsonPath("logic", is(44332211)))
+			.andExpect(jsonPath("serial", is("123")))
+			.andExpect(jsonPath("model", is("PWWIN")))
+			.andExpect(jsonPath("sam", is(0)))
+			.andExpect(jsonPath("ptid", is("F04A2E4088B")))
+			.andExpect(jsonPath("plat", is(4)))
+			.andExpect(jsonPath("version", is("8.00b3")))
+			.andExpect(jsonPath("mxr", is(0)))
+			.andExpect(jsonPath("mxf", is(16777216)))
+			.andExpect(jsonPath("VERFM", is("PWWIN")));
 	}
 
 }
