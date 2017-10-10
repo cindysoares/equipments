@@ -22,5 +22,11 @@ public class TerminalController {
 		String[] values = terminalValues.split(";");
 		return new Terminal(Integer.valueOf(values[0]));
 	}
+	
+	@PostMapping(value="/{logic}", consumes=MediaType.TEXT_PLAIN_VALUE)
+	public Terminal insertTerminal(@PathVariable Integer logic, @RequestBody String terminalValues) {
+		String[] values = terminalValues.split(";");
+		return new Terminal(Integer.valueOf(values[0]));
+	}
 
 }
