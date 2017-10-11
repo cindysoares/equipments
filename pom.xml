@@ -6,7 +6,7 @@
 	<groupId>br.com.muxi</groupId>
 	<artifactId>equipments</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>equipments</name>
 	<description>A REST API to register euipments</description>
