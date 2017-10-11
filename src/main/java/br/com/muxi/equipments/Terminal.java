@@ -1,9 +1,14 @@
 package br.com.muxi.equipments;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@Entity
 public class Terminal {
 	
+	@Id
 	private Integer logic;
 	private String serial;
 	private String model;
@@ -17,7 +22,7 @@ public class Terminal {
 	
 	public Terminal(Integer logic, String serial, String model, Integer sam, String ptid, 
 			Integer plat, String version, Integer mxr, Integer mxf, String verfm) {
-		this.logic = logic;
+		this(logic);
 		this.serial = serial;
 		this.model = model;
 		this.sam = sam;
@@ -27,6 +32,10 @@ public class Terminal {
 		this.mxr = mxr;
 		this.mxf = mxf;
 		this.verfm = verfm;
+	}
+	
+	public Terminal(Integer logic) {
+		this.logic = logic;
 	}
 	
 	public Integer getLogic() {
