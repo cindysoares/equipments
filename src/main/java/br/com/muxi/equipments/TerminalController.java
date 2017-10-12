@@ -20,8 +20,13 @@ public class TerminalController {
 	private TerminalRepository repository;
 	
 	@GetMapping("/{logic}")
-	public Terminal getTerminal(@PathVariable Integer logic) {
-		return repository.findByLogic(logic);
+	public Terminal getTerminal(@PathVariable Integer logic) throws EquipmentsApiException {
+		Terminal terminal = repository.findByLogic(logic);
+		// TODO should throws an specific exception.
+		if(terminal==null) {
+			throw new EquipmentsApiException("The Terminal with logic " + logic + " doesn´t exists.");
+		}
+		return terminal;
     }
 	
 	@PostMapping(value="", consumes=MediaType.TEXT_HTML_VALUE)

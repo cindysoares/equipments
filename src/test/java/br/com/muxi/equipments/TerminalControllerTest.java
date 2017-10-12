@@ -62,6 +62,14 @@ public class TerminalControllerTest {
 		.andExpect(jsonPath("mxf", is(16777216)))
 		.andExpect(jsonPath("VERFM", is("PWWIN")));		
 	}
+	
+	@Test
+	public void testGetTerminal__withNonexistentLogic() throws Exception {
+		mvc.perform(get("/v1.0/terminal/54321"))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("message", is("The Terminal with logic 54321 doesn´t exists.")));		
+	}
 
 	@Test
 	public void testDelete() throws Exception {
@@ -96,7 +104,7 @@ public class TerminalControllerTest {
 	}
 	
 	@Test
-	public void testNewTerminal_withDuplicatedId() throws Exception {
+	public void testNewTerminal_withDuplicatedLogic() throws Exception {
 		mvc.perform(post("/v1.0/terminal")
 			.content("1234;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
 			.contentType(MediaType.TEXT_HTML))
