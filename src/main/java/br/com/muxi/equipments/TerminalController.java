@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.muxi.equipments.exception.EquipmentsApiException;
+
 @RestController
 @RequestMapping("/v1.0/terminal")
 public class TerminalController {
@@ -23,9 +25,14 @@ public class TerminalController {
     }
 	
 	@PostMapping(value="", consumes=MediaType.TEXT_HTML_VALUE)
-	public Terminal insertTerminal(@RequestBody String terminalValues) {
+	public Terminal insertTerminal(@RequestBody String terminalValues) throws EquipmentsApiException {		
 		String[] values = terminalValues.split(";");
-		Terminal terminalToInsert =  new Terminal(Integer.valueOf(values[0]), values[1], values[2],
+		Integer logic = Integer.valueOf(values[0]);
+		// TODO should throws an specific exception.
+		if(repository.exists(logic)) {
+			throw new EquipmentsApiException();
+		}
+		Terminal terminalToInsert =  new Terminal(logic, values[1], values[2],
 				Integer.valueOf(values[3]), values[4], Integer.valueOf(values[5]),
 				values[6], Integer.valueOf(values[7]), Integer.valueOf(values[8]), 
 				values[9]);

@@ -43,7 +43,7 @@ public class TerminalControllerTest {
 	
 	@After
 	public void deleteData() {
-		repository.delete(1234);
+		repository.deleteAll();
 	}
     
 	@Test
@@ -79,11 +79,11 @@ public class TerminalControllerTest {
 	@Test
 	public void testNewTerminal() throws Exception {
 		mvc.perform(post("/v1.0/terminal")
-			.content("44332211;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
+			.content("54321;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
 			.contentType(MediaType.TEXT_HTML))
 		.andExpect(status().isOk())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("logic", is(44332211)))
+		.andExpect(jsonPath("logic", is(54321)))
 		.andExpect(jsonPath("serial", is("123")))
 		.andExpect(jsonPath("model", is("PWWIN")))
 		.andExpect(jsonPath("sam", is(0)))
@@ -93,6 +93,14 @@ public class TerminalControllerTest {
 		.andExpect(jsonPath("mxr", is(0)))
 		.andExpect(jsonPath("mxf", is(16777216)))
 		.andExpect(jsonPath("VERFM", is("PWWIN")));
+	}
+	
+	@Test
+	public void testNewTerminal_withDuplicateId() throws Exception {
+		mvc.perform(post("/v1.0/terminal")
+			.content("1234;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
+			.contentType(MediaType.TEXT_HTML))
+		.andExpect(status().isBadRequest());
 	}
 	
 	@Test
