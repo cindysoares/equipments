@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -31,13 +35,20 @@ public class TerminalControllerTest {
 	
 	@Autowired
 	private TerminalRepository repository;
+	
+	@Before
+	public void createData() {
+		repository.save(new Terminal(1234, "123", "PWWIN", 0, "FffffffFFFF", 1, "8.00b5", 0, 16777216, "PWWIN"));
+	}
+	
+	@After
+	public void deleteData() {
+		repository.delete(1234);
+	}
     
 	@Test
 	public void testGetTerminal() throws Exception {
-		repository.save(new Terminal(1234, "123", "PWWIN", 0, "FffffffFFFF", 1, "8.00b5", 0, 16777216, "PWWIN"));
-		
-		mvc.perform(get("/v1.0/terminal/1234")
-				.contentType(MediaType.APPLICATION_JSON))
+		mvc.perform(get("/v1.0/terminal/1234"))
 		.andExpect(status().isOk())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("logic", is(1234)))
@@ -86,21 +97,24 @@ public class TerminalControllerTest {
 	
 	@Test
 	public void testUpdateTerminal() throws Exception {
-		mvc.perform(put("/v1.0/terminal/44332211")
-				.content("1234;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
-				.contentType(MediaType.TEXT_HTML))
+		Terminal terminalValues = new Terminal(1234, "987", "PP", 1, "BBBBBBB", 9,
+				"8.00c0", 8, 666666, "WWWWW");
+		
+		mvc.perform(put("/v1.0/terminal/1234")
+				.content(new ObjectMapper().writeValueAsString(terminalValues))
+				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("logic", is(44332211)))
-			.andExpect(jsonPath("serial", is("123")))
-			.andExpect(jsonPath("model", is("PWWIN")))
-			.andExpect(jsonPath("sam", is(0)))
-			.andExpect(jsonPath("ptid", is("F04A2E4088B")))
-			.andExpect(jsonPath("plat", is(4)))
-			.andExpect(jsonPath("version", is("8.00b3")))
-			.andExpect(jsonPath("mxr", is(0)))
-			.andExpect(jsonPath("mxf", is(16777216)))
-			.andExpect(jsonPath("VERFM", is("PWWIN")));
+			.andExpect(jsonPath("logic", is(1234)))
+			.andExpect(jsonPath("serial", is("987")))
+			.andExpect(jsonPath("model", is("PP")))
+			.andExpect(jsonPath("sam", is(1)))
+			.andExpect(jsonPath("ptid", is("BBBBBBB")))
+			.andExpect(jsonPath("plat", is(9)))
+			.andExpect(jsonPath("version", is("8.00c0")))
+			.andExpect(jsonPath("mxr", is(8)))
+			.andExpect(jsonPath("mxf", is(666666)))
+			.andExpect(jsonPath("VERFM", is("WWWWW")));
 	}
 
 }

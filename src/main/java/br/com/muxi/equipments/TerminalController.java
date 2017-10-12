@@ -32,22 +32,21 @@ public class TerminalController {
 		return repository.save(terminalToInsert);
 	}
 	
-	@PutMapping(value="/{logic}", consumes=MediaType.TEXT_HTML_VALUE)
-	public Terminal updateTerminal(@PathVariable Integer logic, @RequestBody String terminalValues) {
-		Terminal terminalToUpdate = new Terminal(logic, null, null, null, null, null, null, null, null, null);
+	@PutMapping(value="/{logic}")
+	public Terminal updateTerminal(@PathVariable Integer logic, @RequestBody Terminal terminalValues) {
+		Terminal terminalToUpdate = repository.findByLogic(logic);
 		
-		String[] values = terminalValues.split(";");
-		terminalToUpdate.setSerial(values[1]);
-		terminalToUpdate.setModel(values[2]);
-		terminalToUpdate.setSam(Integer.valueOf(values[3]));
-		terminalToUpdate.setPtid(values[4]);
-		terminalToUpdate.setPlat(Integer.valueOf(values[5]));
-		terminalToUpdate.setVersion(values[6]);
-		terminalToUpdate.setMxr(Integer.valueOf(values[7]));
-		terminalToUpdate.setMxf(Integer.valueOf(values[8]));
-		terminalToUpdate.setVerfm(values[9]);
+		terminalToUpdate.setSerial(terminalValues.getSerial());
+		terminalToUpdate.setModel(terminalValues.getModel());
+		terminalToUpdate.setSam(terminalValues.getSam());
+		terminalToUpdate.setPtid(terminalValues.getPtid());
+		terminalToUpdate.setPlat(terminalValues.getPlat());
+		terminalToUpdate.setVersion(terminalValues.getVersion());
+		terminalToUpdate.setMxr(terminalValues.getMxr());
+		terminalToUpdate.setMxf(terminalValues.getMxf());
+		terminalToUpdate.setVerfm(terminalValues.getVerfm());
 
-		return terminalToUpdate;
+		return repository.save(terminalToUpdate);
 	}
 
 }
