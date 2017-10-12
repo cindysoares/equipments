@@ -20,6 +20,9 @@ public class Terminal {
 	private Integer mxf;	
 	private String verfm;
 	
+	public Terminal() {
+	}
+	
 	public Terminal(Integer logic, String serial, String model, Integer sam, String ptid, 
 			Integer plat, String version, Integer mxr, Integer mxf, String verfm) {
 		this(logic);
