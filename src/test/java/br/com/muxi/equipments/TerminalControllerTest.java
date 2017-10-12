@@ -28,14 +28,28 @@ public class TerminalControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
+	
+	@Autowired
+	private TerminalRepository repository;
     
 	@Test
 	public void testGetTerminal() throws Exception {
+		repository.save(new Terminal(1234, "123", "PWWIN", 0, "FffffffFFFF", 1, "8.00b5", 0, 16777216, "PWWIN"));
+		
 		mvc.perform(get("/v1.0/terminal/1234")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("logic", is(1234)));		
+		.andExpect(jsonPath("logic", is(1234)))
+		.andExpect(jsonPath("serial", is("123")))
+		.andExpect(jsonPath("model", is("PWWIN")))
+		.andExpect(jsonPath("sam", is(0)))
+		.andExpect(jsonPath("ptid", is("FffffffFFFF")))
+		.andExpect(jsonPath("plat", is(1)))
+		.andExpect(jsonPath("version", is("8.00b5")))
+		.andExpect(jsonPath("mxr", is(0)))
+		.andExpect(jsonPath("mxf", is(16777216)))
+		.andExpect(jsonPath("VERFM", is("PWWIN")));		
 	}
 
 	@Test

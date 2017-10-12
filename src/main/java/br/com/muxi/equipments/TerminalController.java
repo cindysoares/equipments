@@ -19,7 +19,7 @@ public class TerminalController {
 	
 	@GetMapping("/{logic}")
 	public Terminal getTerminal(@PathVariable Integer logic) {
-		return new Terminal(logic, null, null, null, null, null, null, null, null, null);
+		return repository.findByLogic(logic);
     }
 	
 	@PostMapping(value="", consumes=MediaType.TEXT_HTML_VALUE)
