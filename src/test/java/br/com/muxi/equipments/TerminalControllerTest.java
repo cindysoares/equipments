@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,7 +55,7 @@ public class TerminalControllerTest {
 	public void testNewTerminal() throws Exception {
 		mvc.perform(post("/v1.0/terminal")
 			.content("44332211;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
-			.contentType(MediaType.TEXT_PLAIN))
+			.contentType(MediaType.TEXT_HTML))
 		.andExpect(status().isOk())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("logic", is(44332211)))
@@ -70,17 +71,10 @@ public class TerminalControllerTest {
 	}
 	
 	@Test
-	public void testUpdateTerminal_withJSON() throws Exception {
-		mvc.perform(post("/v1.0/terminal/1234")
-			.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(status().isUnsupportedMediaType());
-	}
-	
-	@Test
 	public void testUpdateTerminal() throws Exception {
-		mvc.perform(post("/v1.0/terminal/44332211")
+		mvc.perform(put("/v1.0/terminal/44332211")
 				.content("1234;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
-				.contentType(MediaType.TEXT_PLAIN))
+				.contentType(MediaType.TEXT_HTML))
 			.andExpect(status().isOk())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("logic", is(44332211)))
