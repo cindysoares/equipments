@@ -12,7 +12,7 @@ public class EquipmentsApiExceptionHandler {
 	
 	@ExceptionHandler({EquipmentsApiException.class})
 	public ResponseEntity<Object> handleEquipmentsApiException(EquipmentsApiException ex) {
-		return new ResponseEntity<Object>(ex, HttpStatus.BAD_REQUEST);		
-	}	
-
+		return new ResponseEntity<Object>(ex, HttpStatus.BAD_REQUEST);
+	}
+	
 }

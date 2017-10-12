@@ -28,9 +28,10 @@ public class TerminalController {
 	public Terminal insertTerminal(@RequestBody String terminalValues) throws EquipmentsApiException {		
 		String[] values = terminalValues.split(";");
 		Integer logic = Integer.valueOf(values[0]);
+		
 		// TODO should throws an specific exception.
 		if(repository.exists(logic)) {
-			throw new EquipmentsApiException();
+			throw new EquipmentsApiException("A Terminal with the logic " + logic + " already exists.");
 		}
 		Terminal terminalToInsert =  new Terminal(logic, values[1], values[2],
 				Integer.valueOf(values[3]), values[4], Integer.valueOf(values[5]),
@@ -40,8 +41,13 @@ public class TerminalController {
 	}
 	
 	@PutMapping(value="/{logic}")
-	public Terminal updateTerminal(@PathVariable Integer logic, @RequestBody Terminal terminalValues) {
+	public Terminal updateTerminal(@PathVariable Integer logic, @RequestBody Terminal terminalValues) throws EquipmentsApiException {
 		Terminal terminalToUpdate = repository.findByLogic(logic);
+		
+		// TODO should throws an specific exception.
+		if(terminalToUpdate == null) {
+			throw new EquipmentsApiException("The Terminal with logic " + logic + " doesn´t exists.");
+		}
 		
 		terminalToUpdate.setSerial(terminalValues.getSerial());
 		terminalToUpdate.setModel(terminalValues.getModel());

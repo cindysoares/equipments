@@ -96,11 +96,13 @@ public class TerminalControllerTest {
 	}
 	
 	@Test
-	public void testNewTerminal_withDuplicateId() throws Exception {
+	public void testNewTerminal_withDuplicatedId() throws Exception {
 		mvc.perform(post("/v1.0/terminal")
 			.content("1234;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
 			.contentType(MediaType.TEXT_HTML))
-		.andExpect(status().isBadRequest());
+		.andExpect(status().isBadRequest())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("message", is("A Terminal with the logic 1234 already exists.")));
 	}
 	
 	@Test
@@ -123,6 +125,19 @@ public class TerminalControllerTest {
 			.andExpect(jsonPath("mxr", is(8)))
 			.andExpect(jsonPath("mxf", is(666666)))
 			.andExpect(jsonPath("VERFM", is("WWWWW")));
+	}
+	
+	@Test
+	public void testUpdateTerminal_withNonexistentLogic() throws Exception {
+		Terminal terminalValues = new Terminal(1234, "987", "PP", 1, "BBBBBBB", 9,
+				"8.00c0", 8, 666666, "WWWWW");
+		
+		mvc.perform(put("/v1.0/terminal/54321")
+				.content(new ObjectMapper().writeValueAsString(terminalValues))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("message", is("The Terminal with logic 54321 doesn´t exists.")));
 	}
 
 }
