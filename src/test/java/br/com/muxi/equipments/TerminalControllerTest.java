@@ -48,7 +48,7 @@ public class TerminalControllerTest {
     
 	@Test
 	public void testGetTerminal() throws Exception {
-		mvc.perform(get("/v1.0/terminal/1234"))
+		mvc.perform(get("/terminal/1234"))
 		.andExpect(status().isOk())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("logic", is(1234)))
@@ -65,7 +65,7 @@ public class TerminalControllerTest {
 	
 	@Test
 	public void testGetTerminal__withNonexistentLogic() throws Exception {
-		mvc.perform(get("/v1.0/terminal/54321"))
+		mvc.perform(get("/terminal/54321"))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("message", is("The Terminal with logic 54321 doesn´t exists.")));		
@@ -73,20 +73,20 @@ public class TerminalControllerTest {
 
 	@Test
 	public void testDelete() throws Exception {
-		mvc.perform(delete("/v1.0/terminal/1234"))
+		mvc.perform(delete("/terminal/1234"))
 		.andExpect(status().isMethodNotAllowed());
 	}	
 	
 	@Test
 	public void testNewTerminal_withJSON() throws Exception {
-		mvc.perform(post("/v1.0/terminal")
+		mvc.perform(post("/terminal")
 			.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isUnsupportedMediaType());
 	}
 	
 	@Test
 	public void testNewTerminal() throws Exception {
-		mvc.perform(post("/v1.0/terminal")
+		mvc.perform(post("/terminal")
 			.content("54321;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
 			.contentType(MediaType.TEXT_HTML))
 		.andExpect(status().isOk())
@@ -105,7 +105,7 @@ public class TerminalControllerTest {
 	
 	@Test
 	public void testNewTerminal_withDuplicatedLogic() throws Exception {
-		mvc.perform(post("/v1.0/terminal")
+		mvc.perform(post("/terminal")
 			.content("1234;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN")
 			.contentType(MediaType.TEXT_HTML))
 		.andExpect(status().isBadRequest())
@@ -118,7 +118,7 @@ public class TerminalControllerTest {
 		Terminal terminalValues = new Terminal(1234, "987", "PP", 1, "BBBBBBB", 9,
 				"8.00c0", 8, 666666, "WWWWW");
 		
-		mvc.perform(put("/v1.0/terminal/1234")
+		mvc.perform(put("/terminal/1234")
 				.content(new ObjectMapper().writeValueAsString(terminalValues))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -140,7 +140,7 @@ public class TerminalControllerTest {
 		Terminal terminalValues = new Terminal(1234, "987", "PP", 1, "BBBBBBB", 9,
 				"8.00c0", 8, 666666, "WWWWW");
 		
-		mvc.perform(put("/v1.0/terminal/54321")
+		mvc.perform(put("/terminal/54321")
 				.content(new ObjectMapper().writeValueAsString(terminalValues))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())

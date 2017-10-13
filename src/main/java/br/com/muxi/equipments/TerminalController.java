@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.muxi.equipments.exception.EquipmentsApiException;
 
 @RestController
-@RequestMapping("/v1.0/terminal")
+@RequestMapping("/terminal")
 public class TerminalController {
 	
 	@Autowired
