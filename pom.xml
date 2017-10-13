@@ -5,11 +5,11 @@
 
 	<groupId>br.com.muxi</groupId>
 	<artifactId>equipments</artifactId>
-	<version>1.0</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>equipments</name>
-	<description>A REST API to register euipments</description>
+	<description>A REST API to register equipments</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
