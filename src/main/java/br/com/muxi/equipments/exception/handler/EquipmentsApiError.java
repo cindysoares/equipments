@@ -1,13 +1,11 @@
 package br.com.muxi.equipments.exception.handler;
 
-import br.com.muxi.equipments.exception.EquipmentsApiException;
-
 public class EquipmentsApiError {	
 	
 	private String exception;
 	private String message;
 	
-	public EquipmentsApiError(EquipmentsApiException ex) {
+	public EquipmentsApiError(Exception ex) {
 		this.message = ex.getMessage();
 		this.exception = ex.getClass().getCanonicalName();
 	}

@@ -147,5 +147,16 @@ public class TerminalControllerTest {
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("message", is("The Terminal with logic 54321 doesn´t exists.")));
 	}
-
+	
+	@Test
+	public void testUpdateTerminal_withModelValueNull() throws Exception {
+		Terminal terminalValues = new Terminal(1234, "987", null, 1, "BBBBBBB", 9,
+				"8.00c0", 8, 666666, "WWWWW");
+		
+		mvc.perform(put("/terminal/1234")
+				.content(new ObjectMapper().writeValueAsString(terminalValues))
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+	}
 }

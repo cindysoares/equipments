@@ -2,6 +2,8 @@ package br.com.muxi.equipments;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +13,9 @@ public class Terminal {
 	@Id
 	private Integer logic;
 	private String serial;
+	@NotNull
 	private String model;
+	@Min(0)
 	private Integer sam;
 	private String ptid;
 	private Integer plat;

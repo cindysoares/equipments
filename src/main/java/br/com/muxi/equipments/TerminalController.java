@@ -1,5 +1,7 @@
 package br.com.muxi.equipments;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +48,7 @@ public class TerminalController {
 	}
 	
 	@PutMapping(value="/{logic}")
-	public Terminal updateTerminal(@PathVariable Integer logic, @RequestBody Terminal terminalValues) throws EquipmentsApiException {
+	public Terminal updateTerminal(@PathVariable Integer logic, @Valid @RequestBody Terminal terminalValues) throws EquipmentsApiException {
 		Terminal terminalToUpdate = repository.findByLogic(logic);
 		
 		// TODO should throws an specific exception.

@@ -23,6 +23,7 @@ public class TerminalRepositoryTest {
 	 @Test
 	 public void findByLogic() {
 		 Terminal terminal = new Terminal(1234);
+		 terminal.setModel("XX");
 		 entityManager.persist(terminal);
 		 entityManager.flush();
 		 
