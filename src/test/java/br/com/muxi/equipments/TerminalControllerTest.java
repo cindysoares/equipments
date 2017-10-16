@@ -39,6 +39,9 @@ public class TerminalControllerTest {
 	@Before
 	public void createData() {
 		repository.save(new Terminal(1234, "123", "PWWIN", 0, "FffffffFFFF", 1, "8.00b5", 0, 16777216, "PWWIN"));
+		repository.save(new Terminal(4567, "456", "PWWIN", 0, "XXXXXXXXXXX", 1, "5.1", 0, 16777216, "PWWIN"));
+		repository.save(new Terminal(2345, "123", "NIWWP", 0, "YYYYYYYYYYY", 1, "0.2", 0, 16777216, "PWWIN"));
+		repository.save(new Terminal(7890, "789", "NIWWP", 0, "YYYYYYYYYYY", 1, "8.00b5", 0, 16777216, "PWWIN"));
 	}
 	
 	@After
@@ -62,6 +65,51 @@ public class TerminalControllerTest {
 		.andExpect(jsonPath("mxf", is(16777216)))
 		.andExpect(jsonPath("VERFM", is("PWWIN")));		
 	}
+	
+	@Test
+	public void testGetTerminalByModel() throws Exception {
+		mvc.perform(get("/terminal?model=PWWIN"))
+		.andExpect(status().isOk())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$[0].logic", is(1234)))
+		.andExpect(jsonPath("$[0].model", is("PWWIN")))
+		.andExpect(jsonPath("$[1].logic", is(4567)))
+		.andExpect(jsonPath("$[1].model", is("PWWIN")));		
+	}
+	
+	@Test
+	public void testGetTerminalBySerial() throws Exception {
+		mvc.perform(get("/terminal?serial=123"))
+		.andExpect(status().isOk())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$[0].logic", is(1234)))
+		.andExpect(jsonPath("$[0].serial", is("123")))
+		.andExpect(jsonPath("$[1].logic", is(2345)))
+		.andExpect(jsonPath("$[1].serial", is("123")));		
+	}
+	
+	@Test
+	public void testGetTerminalByVersion() throws Exception {
+		mvc.perform(get("/terminal?version=8.00b5"))
+		.andExpect(status().isOk())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$[0].logic", is(1234)))
+		.andExpect(jsonPath("$[0].version", is("8.00b5")))
+		.andExpect(jsonPath("$[1].logic", is(7890)))
+		.andExpect(jsonPath("$[1].version", is("8.00b5")));		
+	}
+	
+	
+	@Test
+	public void testGetAllTerminal() throws Exception {
+		mvc.perform(get("/terminal"))
+		.andExpect(status().isOk())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$[0].logic", is(1234)))
+		.andExpect(jsonPath("$[1].logic", is(2345)))
+		.andExpect(jsonPath("$[2].logic", is(4567)))
+		.andExpect(jsonPath("$[3].logic", is(7890)));		
+	}	
 	
 	@Test
 	public void testGetTerminal__withNonexistentLogic() throws Exception {

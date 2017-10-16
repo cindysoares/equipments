@@ -1,8 +1,11 @@
 package br.com.muxi.equipments;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.muxi.equipments.exception.EquipmentsApiException;
@@ -30,6 +34,18 @@ public class TerminalController {
 		}
 		return terminal;
     }
+	
+	@GetMapping
+	public List<Terminal> getTerminalList(
+			@RequestParam(value="serial", required=false) String serial,
+			@RequestParam(value="model", required=false) String model, 
+			@RequestParam(value="version", required=false) String version) {
+		Terminal example = new Terminal();
+		example.setSerial(serial);
+		example.setModel(model);
+		example.setVersion(version);
+		return repository.findAll(Example.of(example));
+	}
 	
 	@PostMapping(value="", consumes=MediaType.TEXT_HTML_VALUE)
 	public Terminal insertTerminal(@RequestBody String terminalValues) throws EquipmentsApiException {		
