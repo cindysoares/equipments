@@ -11,14 +11,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Terminal {
 	
 	@Id
+	@JsonProperty(required=true)
 	private Integer logic;
+	@JsonProperty(required=true)
 	private String serial;
 	@NotNull
+	@JsonProperty(required=true)
 	private String model;
 	@Min(0)
 	private Integer sam;
 	private String ptid;
 	private Integer plat;
+	@JsonProperty(required=true)
 	private String version;
 	private Integer mxr;
 	private Integer mxf;	
