@@ -5,11 +5,16 @@ import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.muxi.equipments.exception.EquipmentsApiException;
+import br.com.muxi.equipments.schema.ValidateSchema;
 
 @Entity
+@ValidateSchema(jsonFile="terminal-schema.json")
+@JsonInclude(Include.NON_NULL)
 public class Terminal {
 	
 	@Id

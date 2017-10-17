@@ -10,5 +10,9 @@ public class EquipmentsApiException extends Exception {
 	public EquipmentsApiException(String message) {
 		super(message);
 	}
+	
+	public EquipmentsApiException(String message, Exception cause) {
+		super(message, cause);
+	}
 
 }
