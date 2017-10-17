@@ -1,6 +1,7 @@
 package br.com.muxi.equipments;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -197,14 +198,16 @@ public class TerminalControllerTest {
 	}
 	
 	@Test
-	public void testUpdateTerminal_withModelValueNull() throws Exception {
-		Terminal terminalValues = new Terminal(1234, "987", null, 1, "BBBBBBB", 9,
-				"8.00c0", 8, 666666, "WWWWW");
+	public void testUpdateTerminalWithSerialModelVersionValuesEqualsNullAndSamValueMinorZero() throws Exception {
+		Terminal terminalValues = new Terminal(1234, null, null, -1, "BBBBBBB", 9,
+				null, 8, 666666, "WWWWW");
 		
 		mvc.perform(put("/terminal/1234")
 				.content(new ObjectMapper().writeValueAsString(terminalValues))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
-			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("fieldErrors", hasSize(4))); 
+
 	}
 }

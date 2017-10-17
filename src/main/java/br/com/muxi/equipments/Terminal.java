@@ -13,6 +13,7 @@ public class Terminal {
 	@Id
 	@JsonProperty(required=true)
 	private Integer logic;
+	@NotNull
 	@JsonProperty(required=true)
 	private String serial;
 	@NotNull
@@ -22,6 +23,7 @@ public class Terminal {
 	private Integer sam;
 	private String ptid;
 	private Integer plat;
+	@NotNull
 	@JsonProperty(required=true)
 	private String version;
 	private Integer mxr;

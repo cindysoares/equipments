@@ -2,8 +2,8 @@ package br.com.muxi.equipments.exception.handler;
 
 public class EquipmentsApiError {	
 	
-	private String exception;
-	private String message;
+	protected String exception;
+	protected String message;
 	
 	public EquipmentsApiError(Exception ex) {
 		this.message = ex.getMessage();
