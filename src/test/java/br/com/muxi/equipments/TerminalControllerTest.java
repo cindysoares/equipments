@@ -152,6 +152,30 @@ public class TerminalControllerTest {
 		.andExpect(jsonPath("VERFM", is("PWWIN")));
 	}
 	
+	
+	@Test
+	public void testNewTerminalWithInvalidArguments() throws Exception {
+		mvc.perform(post("/terminal")
+			.content("54321;123;PWWIN;aaaaa;F04A2E4088B;aaaa;8.00b3;0;16777216;PWWIN")
+			.contentType(MediaType.TEXT_HTML))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("message", is("Invalid value for sam: aaaaa")));
+	}
+	
+	@Test
+	public void testNewTerminalWithEmptyValues() throws Exception {
+		mvc.perform(post("/terminal")
+			.content("54321;123;PWWIN;;;;8.00b3;;;")
+			.contentType(MediaType.TEXT_HTML))
+		.andExpect(status().isOk())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("logic", is(54321)))
+		.andExpect(jsonPath("serial", is("123")))
+		.andExpect(jsonPath("model", is("PWWIN")))
+		.andExpect(jsonPath("version", is("8.00b3")));
+	}
+	
 	@Test
 	public void testNewTerminal_withDuplicatedLogic() throws Exception {
 		mvc.perform(post("/terminal")

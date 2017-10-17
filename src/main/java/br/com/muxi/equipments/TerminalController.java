@@ -48,17 +48,13 @@ public class TerminalController {
 	
 	@PostMapping(value="", consumes=MediaType.TEXT_HTML_VALUE)
 	public Terminal insertTerminal(@RequestBody String terminalValues) throws EquipmentsApiException {		
-		String[] values = terminalValues.split(";");
-		Integer logic = Integer.valueOf(values[0]);
+		
+		Terminal terminalToInsert = Terminal.valueOf(terminalValues);
 		
 		// TODO should throws an specific exception.
-		if(repository.exists(logic)) {
-			throw new EquipmentsApiException("A Terminal with the logic " + logic + " already exists.");
+		if(repository.exists(terminalToInsert.getLogic())) {
+			throw new EquipmentsApiException("A Terminal with the logic " + terminalToInsert.getLogic() + " already exists.");
 		}
-		Terminal terminalToInsert =  new Terminal(logic, values[1], values[2],
-				Integer.valueOf(values[3]), values[4], Integer.valueOf(values[5]),
-				values[6], Integer.valueOf(values[7]), Integer.valueOf(values[8]), 
-				values[9]);
 		return repository.save(terminalToInsert);
 	}
 	

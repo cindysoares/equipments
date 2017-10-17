@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import br.com.muxi.equipments.exception.EquipmentsApiException;
+
 @Entity
 public class Terminal {
 	
@@ -126,6 +128,40 @@ public class Terminal {
 	
 	public void setVerfm(String verfm) {
 		this.verfm = verfm;
+	}
+	
+	public static Terminal valueOf(String arguments) throws EquipmentsApiException {
+		String[] values = arguments.split(";");
+		
+		Integer logic = parseValueToInt("logic", values, 0);
+		
+		Terminal parsedTerminal =  new Terminal(logic, getValue(values, 1), 
+				getValue(values, 2),
+				parseValueToInt("sam", values, 3), getValue(values, 4), 
+				parseValueToInt("plat", values, 5),
+				getValue(values, 6), parseValueToInt("mxr", values, 7), 
+				parseValueToInt("mxf", values, 8), 
+				getValue(values, 9));
+
+		return parsedTerminal;
+	}
+
+	private static Integer parseValueToInt(String fieldName, String[] values, int index) throws EquipmentsApiException {
+		String value = getValue(values, index);
+		if(value == null || value.trim().isEmpty()) return null;
+		try {
+			return Integer.valueOf(value);
+		} catch(NumberFormatException e) {
+			throw new EquipmentsApiException("Invalid value for " + fieldName + ": " + value);
+		}
+	}
+	
+	private static String getValue(String[] values, int index) {
+		try {
+			return values[index];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;		
+		}
 	}
 
 }
