@@ -5,3 +5,25 @@
 
 # equipments
 A REST API to register equipments
+
+## Setup
+
+1) Install JDK 8 (Download -> http://www.oracle.com/technetwork/pt/java/javase/downloads/index.html)
+2) Install Apache Maven -> https://maven.apache.org/download.cgi
+
+## Run
+
+1) Clone this repository
+
+2) Run the command line below 
+```
+mvn package && java -jar target/equipments-2.0.0-SNAPSHOT.jar
+```
+
+## API usage
+
+https://equipments.herokuapp.com/v2.0/swagger-ui.html
+
+
+
+
