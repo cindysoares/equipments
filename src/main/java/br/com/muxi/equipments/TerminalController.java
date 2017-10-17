@@ -16,15 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.muxi.equipments.exception.EquipmentsApiException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/terminal")
+@Api(value = "Terminal Resource", description ="Endpoint for Terminal operations")
 public class TerminalController {
 	
 	@Autowired
 	private TerminalRepository repository;
 	
-	@GetMapping("/{logic}")
+	@ApiOperation(value = "Search a terminal by logic")
+	@GetMapping(value="/{logic}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Terminal getTerminal(@PathVariable Integer logic) throws EquipmentsApiException {
 		Terminal terminal = repository.findByLogic(logic);
 		// TODO should throws an specific exception.
@@ -34,7 +39,8 @@ public class TerminalController {
 		return terminal;
     }
 	
-	@GetMapping
+	@ApiOperation(value = "Search terminals by serial, model and/or version. Returns all terminals available without parameters.")
+	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Terminal> getTerminalList(
 			@RequestParam(value="serial", required=false) String serial,
 			@RequestParam(value="model", required=false) String model, 
@@ -46,8 +52,12 @@ public class TerminalController {
 		return repository.findAll(Example.of(example));
 	}
 	
-	@PostMapping(value="", consumes=MediaType.TEXT_HTML_VALUE)
-	public Terminal insertTerminal(@RequestBody String terminalValues) throws EquipmentsApiException {		
+	@ApiOperation(value = "Add a terminal", produces=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="", consumes=MediaType.TEXT_HTML_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	public Terminal insertTerminal(
+			@ApiParam(value="A string value with all terminal attributes separated by ';' in the following order: [logic];[serial];[model];[sam];[ptid];[plat];[version];[mxr];[mxf];[verfm]", required=true, 
+			example="44332211;123;PWWIN;0;F04A2E4088B;4;8.00b3;0;16777216;PWWIN") 
+			@RequestBody String terminalValues) throws EquipmentsApiException {		
 		
 		Terminal terminalToInsert = Terminal.valueOf(terminalValues);
 		
@@ -58,7 +68,8 @@ public class TerminalController {
 		return repository.save(terminalToInsert);
 	}
 	
-	@PutMapping(value="/{logic}")
+	@ApiOperation(value = "Update a terminal")
+	@PutMapping(value="/{logic}", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public Terminal updateTerminal(@PathVariable Integer logic, @Validated @RequestBody Terminal terminalValues) throws EquipmentsApiException {
 		Terminal terminalToUpdate = repository.findByLogic(logic);
 		
