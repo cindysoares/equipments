@@ -24,9 +24,10 @@ public class SchemaValidator implements ConstraintValidator<ValidateSchema, Obje
 	@Override
 	public boolean isValid(Object object, ConstraintValidatorContext context) {
 		loadJsonSchema(object);
+		context.disableDefaultConstraintViolation();
 		
 		try {
-			return isValid(object);
+			return isValid(new ObjectMapper().valueToTree(object), context);
 		} catch (IllegalArgumentException | ProcessingException e) {
 			throw new RuntimeException(e);
 		} 
@@ -43,13 +44,10 @@ public class SchemaValidator implements ConstraintValidator<ValidateSchema, Obje
 			}
 		}
 	}
-
-	private boolean isValid(Object terminal) throws IllegalArgumentException, ProcessingException {
-		return isValid(new ObjectMapper().valueToTree(terminal));
-	}
 	
-	private boolean isValid(JsonNode instance) throws ProcessingException {
+	private boolean isValid(JsonNode instance, ConstraintValidatorContext context) throws ProcessingException {
 		ProcessingReport report = jsonSchema.validate(instance);
+		report.forEach(processingMessage -> context.buildConstraintViolationWithTemplate(processingMessage.getMessage()).addConstraintViolation());
 		return report.isSuccess();
 	}
 }

@@ -166,6 +166,16 @@ public class TerminalControllerTest {
 	}
 	
 	@Test
+	public void testNewTerminalWithSerialModelVersionValuesEqualsNullAndSamValueMinorZero() throws Exception {
+		mvc.perform(post("/terminal")
+			.content("54321;;;-1;F04A2E4088B;4;;0;16777216;PWWIN")
+			.contentType(MediaType.TEXT_HTML))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("fieldErrors", hasSize(5))); 
+	}
+	
+	@Test
 	public void testNewTerminalWithEmptyValues() throws Exception {
 		mvc.perform(post("/terminal")
 			.content("54321;123;PWWIN;;;;8.00b3;;;")
