@@ -24,6 +24,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.muxi.equipments.exception.EquipmentsApiException;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(
   webEnvironment = WebEnvironment.RANDOM_PORT,
@@ -38,11 +40,11 @@ public class TerminalControllerTest {
 	private TerminalRepository repository;
 	
 	@Before
-	public void createData() {
-		repository.save(new Terminal(1234, "123", "PWWIN", 0, "FffffffFFFF", 1, "8.00b5", 0, 16777216, "PWWIN"));
-		repository.save(new Terminal(4567, "456", "PWWIN", 0, "XXXXXXXXXXX", 1, "5.1", 0, 16777216, "PWWIN"));
-		repository.save(new Terminal(2345, "123", "NIWWP", 0, "YYYYYYYYYYY", 1, "0.2", 0, 16777216, "PWWIN"));
-		repository.save(new Terminal(7890, "789", "NIWWP", 0, "YYYYYYYYYYY", 1, "8.00b5", 0, 16777216, "PWWIN"));
+	public void createData() throws EquipmentsApiException {
+		repository.save(Terminal.valueOf("1234;123;PWWIN;0;FffffffFFFF;1;8.00b5;0;16777216;PWWIN"));
+		repository.save(Terminal.valueOf("4567;456;PWWIN;0;XXXXXXXXXXX;1;5.1;0;16777216;PWWIN"));
+		repository.save(Terminal.valueOf("2345;123;NIWWP;0;YYYYYYYYYYY;1;0.2;0;16777216;PWWIN"));
+		repository.save(Terminal.valueOf("7890;789;NIWWP;0;YYYYYYYYYYY;1;8.00b5;0;16777216;PWWIN"));
 	}
 	
 	@After
@@ -188,8 +190,7 @@ public class TerminalControllerTest {
 	
 	@Test
 	public void testUpdateTerminal() throws Exception {
-		Terminal terminalValues = new Terminal(1234, "987", "PP", 1, "BBBBBBB", 9,
-				"8.00c0", 8, 666666, "WWWWW");
+		Terminal terminalValues = Terminal.valueOf("1234;987;PP;1;BBBBBBB;9;8.00c0;8;666666;WWWWW");
 		
 		mvc.perform(put("/terminal/1234")
 				.content(new ObjectMapper().writeValueAsString(terminalValues))
@@ -210,8 +211,7 @@ public class TerminalControllerTest {
 	
 	@Test
 	public void testUpdateTerminal_withNonexistentLogic() throws Exception {
-		Terminal terminalValues = new Terminal(1234, "987", "PP", 1, "BBBBBBB", 9,
-				"8.00c0", 8, 666666, "WWWWW");
+		Terminal terminalValues = Terminal.valueOf("1234;987;PP;1;BBBBBBB;9;8.00c0;8;666666;WWWWW");
 		
 		mvc.perform(put("/terminal/54321")
 				.content(new ObjectMapper().writeValueAsString(terminalValues))
@@ -223,8 +223,7 @@ public class TerminalControllerTest {
 	
 	@Test
 	public void testUpdateTerminalWithSerialModelVersionValuesEqualsNullAndSamValueMinorZero() throws Exception {
-		Terminal terminalValues = new Terminal(1234, null, null, -1, "BBBBBBB", 9,
-				null, 8, 666666, "WWWWW");
+		Terminal terminalValues = Terminal.valueOf("1234;;;-1;BBBBBBB;9;;8;666666;WWWWW");
 		
 		mvc.perform(put("/terminal/1234")
 				.content(new ObjectMapper().writeValueAsString(terminalValues))

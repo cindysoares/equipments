@@ -35,20 +35,6 @@ public class Terminal {
 	public Terminal() {
 	}
 	
-	public Terminal(Integer logic, String serial, String model, Integer sam, String ptid, 
-			Integer plat, String version, Integer mxr, Integer mxf, String verfm) {
-		this(logic);
-		this.serial = serial;
-		this.model = model;
-		this.sam = sam;
-		this.ptid = ptid;
-		this.plat = plat;
-		this.version = version;
-		this.mxr = mxr;
-		this.mxf = mxf;
-		this.verfm = verfm;
-	}
-	
 	public Terminal(Integer logic) {
 		this.logic = logic;
 	}
@@ -130,18 +116,29 @@ public class Terminal {
 		this.verfm = verfm;
 	}
 	
+	/**
+	 * 
+	 * @param arguments 
+	 * 		<p>format: [logic];[serial];[model];[sam];[ptid];[plat];[version];[mxr];[mxf];[verfm]</p>
+	 * 		ex.:
+	 * @return
+	 * @throws EquipmentsApiException
+	 */
 	public static Terminal valueOf(String arguments) throws EquipmentsApiException {
 		String[] values = arguments.split(";");
 		
 		Integer logic = parseValueToInt("logic", values, 0);
 		
-		Terminal parsedTerminal =  new Terminal(logic, getValue(values, 1), 
-				getValue(values, 2),
-				parseValueToInt("sam", values, 3), getValue(values, 4), 
-				parseValueToInt("plat", values, 5),
-				getValue(values, 6), parseValueToInt("mxr", values, 7), 
-				parseValueToInt("mxf", values, 8), 
-				getValue(values, 9));
+		Terminal parsedTerminal =  new Terminal(logic);
+		parsedTerminal.setSerial(getValue(values, 1));
+		parsedTerminal.setModel(getValue(values, 2));
+		parsedTerminal.setSam(parseValueToInt("sam", values, 3));
+		parsedTerminal.setPtid(getValue(values, 4)); 
+		parsedTerminal.setPlat(parseValueToInt("plat", values, 5));
+		parsedTerminal.setVersion(getValue(values, 6));
+		parsedTerminal.setMxr(parseValueToInt("mxr", values, 7)); 
+		parsedTerminal.setMxf(parseValueToInt("mxf", values, 8));
+		parsedTerminal.setVerfm(getValue(values, 9));
 
 		return parsedTerminal;
 	}
@@ -158,7 +155,8 @@ public class Terminal {
 	
 	private static String getValue(String[] values, int index) {
 		try {
-			return values[index];
+			String value = values[index];
+			return value==null || value.trim().isEmpty() ? null:value;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return null;		
 		}
